@@ -1,0 +1,7 @@
+**/target
+**/.idea
+**/.classpath
+**/.project
+.git
+frontend/node_modules
+frontend/dist

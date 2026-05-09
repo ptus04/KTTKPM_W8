@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: ${USER_SERVICE_URI:http://localhost:8081}
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - StripPrefix=2
+        - id: movie-service
+          uri: ${MOVIE_SERVICE_URI:http://localhost:8082}
+          predicates:
+            - Path=/api/movies,/api/movies/**
+          filters:
+            - RewritePath=/api/movies(?<segment>.*), /movies$\{segment}
+        - id: booking-service
+          uri: ${BOOKING_SERVICE_URI:http://localhost:8083}
+          predicates:
+            - Path=/api/bookings,/api/bookings/**
+          filters:
+            - RewritePath=/api/bookings(?<segment>.*), /bookings$\{segment}
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
